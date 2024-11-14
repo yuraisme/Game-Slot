@@ -3,7 +3,7 @@ import time
 
 NUM_LINES= 4 
 NUM_COLUMNS= 3
-SYMBOLS= ['A', 'B']
+SYMBOLS= ['A', 'B', 'C']
 WON__K = 2 # Ratio of a winning bet
 
 
@@ -26,13 +26,13 @@ class Game:
     
     def choose_lines(self):         
          while True:
-            temp_n= input(f'(to QUIT - press "q")) OR Choose how many lines will be the winner (1-{NUM_LINES}): ')
-            if temp_n == 'q':
+            input_n_lines= input(f'(to QUIT - press "q")) OR Choose how many lines will be the winner (1-{NUM_LINES}): ')
+            if input_n_lines == 'q':
                 return False
                 
-            if temp_n.isdigit():
-                if 0 < int(temp_n) <= NUM_LINES:
-                    self.lines_amount= int(temp_n)
+            if input_n_lines.isdigit():
+                if 0 < int(input_n_lines) <= NUM_LINES:
+                    self.lines_amount= int(input_n_lines)
                     break
             else:
                 print(f'Put the right digit - 1 .. {NUM_LINES}')
@@ -44,10 +44,8 @@ class Game:
 class Slot: 
     """
     Game wheel is the main spinned device    
-    """
- 
+    """ 
     lines= []
-    # column= []
     result_lines= []
     
     def spin(self):
@@ -97,7 +95,7 @@ class Cashier:
                 
         if sum_lines > 0:
             if bet_lines <= sum_lines:
-                print(f'Congratilations! You won ${(min(bet_lines, sum_lines) * bet *  WON__K * 2) - (min(bet_lines, sum_lines) * bet)} !')
+                print(f'Congratilations! You won ${(min(bet_lines, sum_lines) * bet *  WON__K) - (min(bet_lines, sum_lines) * bet)} !')
                 self.amount+= min(bet_lines, sum_lines)*bet*WON__K - (min(bet_lines, sum_lines) * bet)         
             
             else: # won less than bet lines
