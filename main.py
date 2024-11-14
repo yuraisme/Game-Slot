@@ -1,4 +1,5 @@
 import random
+import time
 
 NUM_LINES = 3 
 NUM_COLUMNS = 3
@@ -19,7 +20,7 @@ class Slot:
     """
     SYMBOLS= ['A', 'B', 'C']
     lines= []
-    column= []
+    # column= []
     result_lines= []
     
     def spin(self):
@@ -30,7 +31,7 @@ class Slot:
         self.columns=[[random.choice(self.SYMBOLS) for j in range(NUM_LINES)] for i in range(NUM_COLUMNS)]         
         
         # print(self.columns)          
-        
+        self.lines.clear()        
         for row in range(NUM_LINES):            
             self.lines.append([])
             
@@ -40,13 +41,16 @@ class Slot:
 
       
     def show_result(self):
+        print('\n','='*13)
+        self.result_lines=[]
         
         for row in self.lines:
             s= "| "
             s+= ''.join([c + ' | ' for c in row])                
             s+= ' - !WIN!' if all([row[0] ==_ for _ in row]) else ' -  LOSE'
             self.result_lines.append(1 if all([row[0] ==_ for _ in row]) else  - 0)
-            print(s)       
+            print(s) 
+        print('='*13)      
         # print(self.result_lines)
         # print(type(self.result_lines))
         print(f'\n Won {sum(self.result_lines)} lines! ')     
@@ -64,10 +68,12 @@ class Cashier:
 def main_cycle():
     cashier = Cashier()
     cashier.fill_amount()
-    
     slot = Slot()
-    slot.spin()
-    slot.show_result()
+    while True:        
+        slot.spin()
+        slot.show_result()
+        time.sleep(1)
+    
     
     
     
