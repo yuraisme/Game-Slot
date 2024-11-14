@@ -3,7 +3,7 @@ import time
 
 NUM_LINES= 4 
 NUM_COLUMNS= 3
-SYMBOLS= ['A', 'B', 'C']
+SYMBOLS= ['A', 'B']
 WON__K = 2 # Ratio of a winning bet
 
 
@@ -76,14 +76,13 @@ class Slot:
         for row in self.lines:
             s= "| "
             s+= ''.join([c + ' | ' for c in row])                
-            s+= ' -  !WIN!' if all([row[0] ==_ for _ in row]) else ' -  LOSE'
+            s+= ' - \033[31m!WIN!\033[0m' if all([row[0] ==_ for _ in row]) else ' -  LOSE'
             self.result_lines.append(1 if all([row[0] ==_ for _ in row]) else  - 0)
             print(s) 
         print('='*13)      
         # print(self.result_lines)
         # print(type(self.result_lines))
         print(f'\n Won {sum(self.result_lines)} lines! ')     
-        
     
 class Cashier:
     def fill_amount(self):
@@ -95,13 +94,20 @@ class Cashier:
 
     def calc_profit(self, res_lines:list, bet_lines:int, bet:int) -> int:
         sum_lines  = sum(res_lines)
+                
         if sum_lines > 0:
-            print(f'Congratilations! You won ${min(bet_lines, sum_lines)*bet*WON__K} !')
-            self.amount+= min(bet_lines, sum_lines)*bet*WON__K           
-          
+            if bet_lines <= sum_lines:
+                print(f'Congratilations! You won ${(min(bet_lines, sum_lines) * bet *  WON__K * 2) - (min(bet_lines, sum_lines) * bet)} !')
+                self.amount+= min(bet_lines, sum_lines)*bet*WON__K - (min(bet_lines, sum_lines) * bet)         
+            
+            else: # won less than bet lines
+                print(f'Congratilations! You just won ${(sum_lines * bet * WON__K) - (bet_lines * bet)} !')
+                self.amount+= (sum_lines * bet * WON__K) - (bet_lines * bet)
+                
+            
         else:            
-            print(f'Sorry! You loose ${bet*bet_lines}!')             
-            self.amount-=bet*bet_lines
+            print(f'Sorry! You loose ${bet * bet_lines}!')             
+            self.amount-= bet * bet_lines
         
         print(f'Your balance is: ${self.amount}')
         return self.amount
@@ -134,5 +140,5 @@ def main_cycle():
     
     
     
-    
-main_cycle()
+if __name__ == '__main__':    
+    main_cycle()
